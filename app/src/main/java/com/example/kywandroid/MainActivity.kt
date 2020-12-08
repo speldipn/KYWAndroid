@@ -2,15 +2,12 @@ package com.example.kywandroid
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color.red
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableField
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kywandroid.databinding.ActivityMainBinding
