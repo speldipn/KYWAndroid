@@ -6,9 +6,6 @@
 
     <data>
 
-        <variable
-            name="viewModel"
-            type="com.example.kywandroid.MainActivity.ViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
