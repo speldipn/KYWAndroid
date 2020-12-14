@@ -11,49 +11,37 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kywandroid.databinding.ActivityMainBinding
+import com.example.kywandroid.model.Response
+import com.example.kywandroid.network.PokeAPI
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+    lateinit var pokeApi: PokeAPI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        Log.d(TAG, ">>>>>> start")
-        runExample()
-        Log.d(TAG, ">>>>>> end")
-    }
 
-    private fun runExample() {
-        val adapter = MainRecyclerViewAdapter()
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerView.addItemDecoration(DivideDecoration(this))
-        adapter.setDataAndRefresh(listOf("aa", "bb", "cc", "dd", "ee", "ff", "gg"))
-    }
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://pokeapi.co/api/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        pokeApi = retrofit.create(PokeAPI::class.java)
 
-    inner class DivideDecoration(context: Context) : RecyclerView.ItemDecoration() {
-        private val paint: Paint = Paint()
-        val strokeWidth = 2
-
-        init {
-            paint.strokeWidth = context.resources.displayMetrics.density * strokeWidth
-            paint.color = ContextCompat.getColor(context, R.color.red)
-        }
-
-        override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-            for (i in 0 until parent.childCount) {
-                val view = parent.getChildAt(i)
-                c.drawLine(
-                    view.left.toFloat(),
-                    view.bottom.toFloat(),
-                    view.right.toFloat(),
-                    view.bottom.toFloat(),
-                    paint
-                )
-
+        pokeApi.listPokemons().enqueue(object : Callback<Response> {
+            override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
+//                response.body()?.next
             }
-        }
+
+            override fun onFailure(call: Call<Response>, t: Throwable) {
+                Log.d(TAG, "onFail")
+            }
+        })
     }
 
     companion object {
